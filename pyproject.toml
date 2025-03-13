@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "watch-server"
+version = "0.1.0"
+description = ""
+authors = ["knv127 <20200867@sungshin.ac.kr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.32.3"
+django = "~4.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
