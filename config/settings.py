@@ -144,3 +144,5 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+OPENSEARCH_URL = "search-watch-opensearch-domain-y2ayujgu47jvuwgv6vj4wl4et4.ap-northeast-2.es.amazonaws.com"
