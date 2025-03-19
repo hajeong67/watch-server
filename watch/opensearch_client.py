@@ -1,11 +1,12 @@
 from opensearchpy import OpenSearch
+import json
 
-# OpenSearch 도메인 엔드포인트 설정
-HOST = "search-watch-opensearch-domain-y2ayujgu47jvuwgv6vj4wl4et4.ap-northeast-2.es.amazonaws.com"  # OpenSearch 엔드포인트
-PORT = 443  # HTTPS 사용
+with open("config.json") as f:
+    config = json.load(f)
 
-# OpenSearch 인증 정보 (마스터 사용자 계정)
-AUTH = ("hajeong", "Hajeong67!")  # 마스터 사용자 계정 정보 입력
+HOST = config["opensearch"]["host"]
+PORT = config["opensearch"]["port"]
+AUTH = (config["opensearch"]["auth"]["user"], config["opensearch"]["auth"]["password"])
 
 # OpenSearch 클라이언트 생성
 client = OpenSearch(
@@ -17,5 +18,4 @@ client = OpenSearch(
     ssl_show_warn=False  # SSL 경고 비활성화
 )
 
-
-
+print("OpenSearch 클라이언트가 정상적으로 연결되었습니다!")

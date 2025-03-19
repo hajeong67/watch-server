@@ -41,6 +41,7 @@ SYSTEM_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'drf_spectacular',
 ]
 
 CUSTOM_APPS = [
@@ -146,3 +147,24 @@ REST_FRAMEWORK = {
 }
 
 OPENSEARCH_URL = "search-watch-opensearch-domain-y2ayujgu47jvuwgv6vj4wl4et4.ap-northeast-2.es.amazonaws.com"
+
+#spectular setting
+SPECTACULAR_SETTINGS = {
+    'TITLE': "Sensor Data API",
+    'DESCRIPTION': "API documentation",
+    'VERSION': "1.0.0",
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_SETTINGS': {
+        'persistAuthorization': True,
+    },
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization',
+            'description': "JWT 인증을 위해 'Bearer <your_access_token>' 형식으로 입력하세요.",
+        },
+    },
+    'SECURITY': [{'Bearer': []}],
+}
