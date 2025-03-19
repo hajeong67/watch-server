@@ -1,0 +1,2 @@
+# OpenSearch 인증 정보가 있는 파일을 Git에서 제외
+config.json
