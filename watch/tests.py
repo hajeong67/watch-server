@@ -19,7 +19,7 @@ data = {
     "time": 1710480000000,  # 예제 타임스탬프
     "device_id": "user_123",
     "acc": {"x": 10, "y": -5, "z": 2},
-    "ppg": [100, 102, 105, 107, 110]  # 👈 배열로 저장
+    "ppg": [100, 102, 105, 107, 110]
 }
 
 response = client.index(index="sensor-data", body=data)
