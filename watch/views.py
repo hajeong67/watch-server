@@ -25,16 +25,37 @@ class SensorDataListAPIView(APIView):
 
         return Response({"data": serialized_data})
 
-class SensorDataByDeviceAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
+# class AddSensorDataAPIView(APIView):
+#     # permission_classes = [IsAuthenticated]
+#
+#     @extend_schema(
+#         summary="Add sensor data",
+#         description="Store new sensor data in OpenSearch.",
+#         request=SensorDataSerializer,
+#         responses={201: OpenApiTypes.OBJECT},
+#     )
+#     def post(self, request, *args, **kwargs):
+#         serializer = SensorDataSerializer(data=request.data)
+#
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#         try:
+#             data = serializer.validated_data
+#             response = client.index(index=INDEX_NAME, body=data)
+#
+#             return Response({"message": "데이터 저장 완료!", "result": response}, status=status.HTTP_201_CREATED)
+#         except Exception as e:
+#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class SensorDataDetailAPIView(APIView):
     @extend_schema(
         summary="Get sensor data by device_id",
         description="Retrieve sensor data filtered by device_id.",
         responses={200: OpenApiTypes.OBJECT},
     )
     def get(self, request, device_id, *args, **kwargs):
-        query = {"query": {"match": {"device_id": device_id}}}  # 특정 device_id 검색
+        query = {"query": {"match": {"device_id": device_id}}}
         response = client.search(index=INDEX_NAME, body=query)
 
         serialized_data = SensorDataSerializer(
@@ -43,31 +64,6 @@ class SensorDataByDeviceAPIView(APIView):
 
         return Response({"data": serialized_data})
 
-class AddSensorDataAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
-
-    @extend_schema(
-        summary="Add sensor data",
-        description="Store new sensor data in OpenSearch.",
-        request=SensorDataSerializer,
-        responses={201: OpenApiTypes.OBJECT},
-    )
-    def post(self, request, *args, **kwargs):
-        serializer = SensorDataSerializer(data=request.data)
-
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            data = serializer.validated_data
-            response = client.index(index=INDEX_NAME, body=data)
-
-            return Response({"message": "데이터 저장 완료!", "result": response}, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class UpdateSensorDataAPIView(APIView):
     @extend_schema(
         summary="Update sensor data",
         description="Update existing sensor data in OpenSearch.",
@@ -76,7 +72,6 @@ class UpdateSensorDataAPIView(APIView):
     )
     def put(self, request, device_id, *args, **kwargs):
         serializer = SensorDataSerializer(data=request.data)
-
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -94,8 +89,6 @@ class UpdateSensorDataAPIView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-class PartialUpdateSensorDataAPIView(APIView):
     @extend_schema(
         summary="Partially update sensor data",
         description="Partially update existing sensor data in OpenSearch.",
@@ -118,8 +111,6 @@ class PartialUpdateSensorDataAPIView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-class DeleteSensorDataAPIView(APIView):
     @extend_schema(
         summary="Delete sensor data",
         description="Delete sensor data from OpenSearch.",

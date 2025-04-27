@@ -9,6 +9,11 @@ readme = "README.md"
 python = "^3.11"
 requests = "^2.32.3"
 django = "~4.2"
+psycopg = { version = "3.1.*", extras = ["binary", "pool"] }
+numpy = "^2.2.4"
+celery = "^5.5.1"
+django-celery-results = "^2.6.0"
+redis = "^5.2.1"
 
 
 [build-system]

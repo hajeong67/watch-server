@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-nc=9wm%ozwx@_c#yy!dr3b=^a)x+2g&sw5s*g^jwj+ls1@nba*
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+LOCALHOST = 'localhost'
 
 # Application definition
 
@@ -40,12 +40,16 @@ SYSTEM_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    # 'rest_framework_gis',
     'rest_framework',
     'drf_spectacular',
+    'django_celery_results',
 ]
 
 CUSTOM_APPS = [
     'watch.apps.WatchConfig',
+    'users.apps.UserConfig',
+    'emotion.modules.apps.ModulesConfig'
 ]
 
 INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
@@ -56,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    'users.middleware.DeviceIDMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -86,13 +91,37 @@ MEDIA_ROOT = BASE_DIR / 'uploads'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        'NAME': 'watch_db',
+        'USER': 'watch_user',
+        'PASSWORD': 'watch_pass',
     }
 }
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
+        #     'hosts': [
+        #         (os.environ.get('REDIS_CHANNEL_LAYER_PRIMARY', LOCALHOST), 6379),
+        #     ],
+        # },
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -135,6 +164,21 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Celery Configuration
+CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = 'Asia/Seoul'
+# CELERY_BROKER_URL = f"redis://{os.environ.get('REDIS_SESSION_STORAGE_PRIMARY', LOCALHOST)}:6379/0"
+# CELERY_BROKER_URL = 'redis://172.17.0.3:6379/0'
+# CELERY_BROKER_URL = 'redis://redis:6379/0'
+# CELERY_BROKER_URL = f"redis://{os.environ.get('REDIS_SESSION_STORAGE_PRIMARY', '127.0.0.1')}:6379/0"
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 7200}  # 1 hour
+CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_REDBEAT_REDIS_URL = f"redis://{os.environ.get('REDIS_SESSION_STORAGE_PRIMARY', LOCALHOST)}:6379/1"
+
+# Auth
+AUTH_USER_MODEL = 'users.User'
+
 # rest_framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -168,3 +212,28 @@ SPECTACULAR_SETTINGS = {
     },
     'SECURITY': [{'Bearer': []}],
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',  # console handler는 DEBUG 레벨
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'WARNING',  # Django 관련 로거는 WARNING 레벨
+            'propagate': True,
+        },
+        'logger': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # logger 로거는 DEBUG 레벨
+            'propagate': False,
+        },
+    },
+}
+
+from watch.opensearch_client import client as opensearch_client

@@ -7,3 +7,5 @@ __pycache__/
 *.pyo
 
 db.sqlite3
+
+watch-server-key.pem
