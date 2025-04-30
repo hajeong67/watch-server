@@ -1,7 +1,10 @@
 from opensearchpy import OpenSearch
 import json
+import os
 
-with open(r"C:\Users\user\Desktop\watch-server\watch-server\config.json") as f:
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+with open(os.path.join(BASE_DIR, 'config', 'config.json')) as f:
     config = json.load(f)
 
 HOST = config["opensearch"]["host"]
