@@ -8,8 +8,8 @@ class Command(BaseCommand):
     help = '테스트용 watch_user와 Watch 등록'
 
     def handle(self, *args, **kwargs):
-        username = 'watch_user'
-        password = 'watch_pass'
+        username = 'user_1'
+        password = '1111'
         device_id = 'watch-id-001'
 
         user, created = User.objects.get_or_create(username=username)
