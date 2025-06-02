@@ -1,5 +1,5 @@
 # OpenSearch 인증 정보가 있는 파일을 Git에서 제외
-config.json
+config/config.json
 
 # Python 캐시 파일 제외
 __pycache__/

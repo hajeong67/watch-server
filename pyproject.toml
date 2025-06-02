@@ -2,7 +2,7 @@
 name = "watch-server"
 version = "0.1.0"
 description = ""
-authors = ["knv127 <20200867@sungshin.ac.kr>"]
+authors = ["hajeong67 <20221346@sungshin.ac.kr>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -10,13 +10,15 @@ python = "^3.11"
 requests = "^2.32.3"
 django = "~4.2"
 psycopg = { version = "3.1.*", extras = ["binary", "pool"] }
-numpy = "^2.2.4"
+numpy = "2.1.0"
 celery = "^5.5.1"
-django-celery-results = "^2.6.0"
 redis = "^5.2.1"
 gunicorn = "^23.0.0"
+djangorestframework = "^3.16.0"
+drf-spectacular = "^0.28.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+package-mode = false

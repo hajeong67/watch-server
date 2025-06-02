@@ -1,5 +1,6 @@
 import json
 import numpy as np
+import os
 
 from django.core.cache import cache
 from config import settings
@@ -16,10 +17,12 @@ from preprocess.ppg_preprocess import PpgModelPredictor
 import config.settings as settings
 
 logger = logging.getLogger(__name__)
-MODEL_PATH = r"C:\Users\user\Desktop\watch-server\watch-server\emotion\ml_models\best_model_v6.h5"
-GMM_P_PATH = r"C:\Users\user\Desktop\watch-server\watch-server\emotion\ml_models\gmm_p_v2.pkl"
-GMM_N_PATH = r"C:\Users\user\Desktop\watch-server\watch-server\emotion\ml_models\gmm_n_v2.pkl"
-PICKLE_PATH = r"C:\Users\user\Desktop\watch-server\watch-server\emotion\ml_models\list_v2.pickle"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # emotion/modules 디렉토리 기준
+
+MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'ml_models', 'best_model_v6.h5'))
+GMM_P_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'ml_models', 'gmm_p_v2.pkl'))
+GMM_N_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'ml_models', 'gmm_n_v2.pkl'))
+PICKLE_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'ml_models', 'list_v2.pickle'))
 CHUNK_SIZE = 300
 OVERLAP = 30
 

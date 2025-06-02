@@ -25,6 +25,10 @@ class PpgModelPredictor:
         self.list_pickle_path = list_pickle_path
         self.chunk_size = chunk_size
         self.overlap = overlap
+        print("📍 Model path:", os.path.abspath(self.model_path))
+        print("📍 GMM Negative path:", os.path.abspath(self.gmm_n_path))
+        print("📍 GMM Positive path:", os.path.abspath(self.gmm_p_path))
+        print("📍 Feature list path:", os.path.abspath(self.list_pickle_path))
         self.model = self.load_model()
         self.gmm_n, self.gmm_p, self.lab0_f, self.lab1_f, self.m_f, self.n_f = self.load_gmm_and_list()
 
