@@ -140,6 +140,8 @@ class WatchSensorDataAPIView(APIView):
         responses={201: OpenApiTypes.OBJECT},
     )
     def post(self, request, *args, **kwargs):
+        print("✅ 요청 유저:", request.user)
+        print("✅ 인증 여부:", request.user.is_authenticated)
         serializer = SensorDataSerializer(data=request.data)
         print("✅ 수신 데이터:", request.data)
 
