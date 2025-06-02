@@ -140,6 +140,7 @@ class WatchSensorDataAPIView(APIView):
     )
     def post(self, request, *args, **kwargs):
         serializer = SensorDataSerializer(data=request.data)
+        print("✅ 수신 데이터:", request.data)
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
