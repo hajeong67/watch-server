@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData">
+  <component name="PublishConfigData" serverName="EC2-WatchServer">
     <serverData>
+      <paths name="EC2-WatchServer">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/ubuntu/watch-server" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="jhyoo@210.125.91.91:22 key">
         <serverdata>
           <mappings>

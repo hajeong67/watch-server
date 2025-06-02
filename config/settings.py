@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-nc=9wm%ozwx@_c#yy!dr3b=^a)x+2g&sw5s*g^jwj+ls1@nba*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.39.239.205']
+ALLOWED_HOSTS = ['52.78.71.115']
 
 # Application definition
 
@@ -43,12 +43,14 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'drf_spectacular',
     'django_celery_results',
+    'channels',
 ]
 
 CUSTOM_APPS = [
     'watch.apps.WatchConfig',
     'users.apps.UserConfig',
     'emotion.modules.apps.ModulesConfig'
+    'logapp.apps.LogappConfig'
 ]
 
 INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
@@ -83,6 +85,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = 'config.asgi.application'
 
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = BASE_DIR / 'uploads'

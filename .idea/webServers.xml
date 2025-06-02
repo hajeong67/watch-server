@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="daef1af5-e561-43f5-9774-659735346e7c" name="EC2-WatchServer">
+        <fileTransfer rootFolder="/home/ubuntu/watch-server" accessType="SFTP" host="52.78.71.115" port="22" sshConfigId="5b8d732d-9225-41d9-8935-2606be38c6a3" sshConfig="ubuntu@52.78.71.115:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
