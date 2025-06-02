@@ -8,8 +8,6 @@ from rest_framework import status
 from watch.serializers import SensorDataSerializer
 
 class SensorDataListAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
     @extend_schema(
         summary="Get all sensor data",
         description="Retrieve all sensor data stored in OpenSearch.",
@@ -132,7 +130,6 @@ class SensorDataDetailAPIView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class WatchSensorDataAPIView(APIView):
-    permission_classes = [IsAuthenticated]
     @extend_schema(
         summary="Receive and store sensor data from watch",
         description="Receive sensor data from watch and store it in OpenSearch.",
@@ -140,16 +137,17 @@ class WatchSensorDataAPIView(APIView):
         responses={201: OpenApiTypes.OBJECT},
     )
     def post(self, request, *args, **kwargs):
-        print("✅ 요청 유저:", request.user)
-        print("✅ 인증 여부:", request.user.is_authenticated)
+        print("요청 유저:", request.user)
+        if not request.user:
+            return Response({"error": "인증되지 않은 디바이스입니다."}, status=status.HTTP_401_UNAUTHORIZED)
+        print("✅ 인증 완료!")
         serializer = SensorDataSerializer(data=request.data)
         print("✅ 수신 데이터:", request.data)
-
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             data = serializer.validated_data
+            data["user_id"] = request.user.id
             response = client.index(index=INDEX_NAME, body=data)
 
             return Response({"message": "워치 데이터 저장 완료!", "result": response}, status=status.HTTP_201_CREATED)
