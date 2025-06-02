@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema, OpenApiTypes
 from rest_framework import status
 from watch.serializers import SensorDataSerializer
+from emotion.modules.tasks import run_ppg_positioning
 
 class SensorDataListAPIView(APIView):
     @extend_schema(
@@ -131,25 +132,40 @@ class SensorDataDetailAPIView(APIView):
 
 class WatchSensorDataAPIView(APIView):
     @extend_schema(
-        summary="Receive and store sensor data from watch",
-        description="Receive sensor data from watch and store it in OpenSearch.",
+        summary="워치 센서 데이터 수신 및 실시간 추론",
+        description="워치에서 수신된 PPG/ACC 데이터를 저장하고, 바로 실시간 추론을 수행합니다.",
         request=SensorDataSerializer,
-        responses={201: OpenApiTypes.OBJECT},
+        responses={201: SensorDataSerializer}
     )
     def post(self, request, *args, **kwargs):
         print("요청 유저:", request.user)
         if not request.user:
             return Response({"error": "인증되지 않은 디바이스입니다."}, status=status.HTTP_401_UNAUTHORIZED)
         print("✅ 인증 완료!")
+
         serializer = SensorDataSerializer(data=request.data)
         print("✅ 수신 데이터:", request.data)
+
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             data = serializer.validated_data
             data["user_id"] = request.user.id
-            response = client.index(index=INDEX_NAME, body=data)
 
-            return Response({"message": "워치 데이터 저장 완료!", "result": response}, status=status.HTTP_201_CREATED)
+            # OpenSearch 저장
+            response = client.index(index=INDEX_NAME, body=data)
+            print("📦 저장 완료:", response)
+
+            # 동기 추론 수행
+            result = run_ppg_positioning(data)
+            print("🧠 추론 결과:", result)
+
+            return Response({
+                "message": "워치 데이터 저장 및 추론 완료",
+                "opensearch_result": response,
+                "inference_result": result
+            }, status=status.HTTP_201_CREATED)
+
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
