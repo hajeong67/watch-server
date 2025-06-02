@@ -8,7 +8,7 @@ from rest_framework import status
 from watch.serializers import SensorDataSerializer
 
 class SensorDataListAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
         summary="Get all sensor data",
