@@ -21,5 +21,6 @@ jobs:
         key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         script: |
           cd /home/ubuntu/watch-server
-          git pull origin main
+          git fetch origin
+          git reset --hard origin/main
           # 필요하면 서버 재시작 명령어 추가 (ex: pm2 restart, docker restart 등)
