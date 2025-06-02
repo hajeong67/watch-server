@@ -81,5 +81,5 @@ def create_index():
         response = client.indices.create(index=INDEX_NAME, body=body)
         print(f"✅ 인덱스 '{INDEX_NAME}' 생성 완료! 응답: {response}")
 
-# 인덱스 생성 실행
-create_index()
+def init_index():
+    create_index()

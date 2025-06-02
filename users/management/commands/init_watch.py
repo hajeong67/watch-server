@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         username = 'watch_user'
         password = 'watch_pass'
-        device_id = 'test-watch-id-001'
+        device_id = 'watch-id-001'
 
         user, created = User.objects.get_or_create(username=username)
         if created:
