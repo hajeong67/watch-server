@@ -103,7 +103,7 @@ MEDIA_ROOT = BASE_DIR / 'uploads'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '127.0.0.1',
+        'HOST': '52.78.71.115',
         'PORT': '5432',
         'NAME': 'watch_db',
         'USER': 'watch_user',
