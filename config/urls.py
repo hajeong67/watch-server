@@ -22,8 +22,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-default'),
+
     path("api/", include("watch.urls")),
-    path('api/', include('emotion.modules.urls')),
+    path("api/emotion/", include("emotion.modules.urls")),
+
     # swagger
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
