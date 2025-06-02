@@ -49,7 +49,7 @@ THIRD_PARTY_APPS = [
 CUSTOM_APPS = [
     'watch.apps.WatchConfig',
     'users.apps.UserConfig',
-    'emotion.modules.apps.ModulesConfig'
+    'emotion.modules.apps.ModulesConfig',
     'logapp.apps.LogappConfig'
 ]
 
