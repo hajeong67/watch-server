@@ -132,6 +132,7 @@ class SensorDataDetailAPIView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class WatchSensorDataAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     @extend_schema(
         summary="Receive and store sensor data from watch",
         description="Receive sensor data from watch and store it in OpenSearch.",
