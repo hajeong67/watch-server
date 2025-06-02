@@ -23,4 +23,5 @@ jobs:
           cd /home/ubuntu/watch-server
           git fetch origin
           git reset --hard origin/main
+          sudo systemctl start postgresql 
           # 필요하면 서버 재시작 명령어 추가 (ex: pm2 restart, docker restart 등)
