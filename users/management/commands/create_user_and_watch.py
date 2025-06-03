@@ -17,9 +17,10 @@ class Command(BaseCommand):
 
         if User.objects.filter(username=username).exists():
             user = User.objects.get(username=username)
-            self.stdout.write(self.style.WARNING(f"User '{username}' already exists."))
+            self.stdout.write(self.style.WARNING(f"⚠️ User '{username}' already exists."))
         else:
-            user = User.objects.create_user(username=username, password="1234")
+            email = f"{username}@example.com"
+            user = User.objects.create_user(username=username, email=email, password="1234")
             self.stdout.write(self.style.SUCCESS(f"✅ User '{username}' created."))
 
         if hasattr(user, 'watch'):
