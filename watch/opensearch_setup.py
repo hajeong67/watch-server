@@ -1,6 +1,6 @@
 from watch.opensearch_client import client
 
-INDEX_ALIAS       = "logs-ppg-inference"
+INDEX_NAME       = "logs-ppg-inference"
 ILM_POLICY_NAME   = "ppg-ilm-policy"
 
 # ILM 정책
@@ -42,12 +42,12 @@ def create_ilm_policy():
 # 인덱스 템플릿
 def create_index_template():
     template = {
-        "index_patterns": [f"{INDEX_ALIAS}-*"],
+        "index_patterns": [f"{INDEX_NAME}-*"],
         "data_stream": {},
         "template": {
             "settings": {
                 "index.lifecycle.name": ILM_POLICY_NAME,
-                "index.lifecycle.rollover_alias": INDEX_ALIAS,
+                "index.lifecycle.rollover_alias": INDEX_NAME,
                 "number_of_shards": 1,
                 "number_of_replicas": 1
             },
@@ -76,11 +76,11 @@ def create_index_template():
 # 데이터 스트림
 def create_data_stream():
     try:
-        client.indices.create_data_stream(name=INDEX_ALIAS)
-        print(f"✅ 데이터 스트림 '{INDEX_ALIAS}' OK")
+        client.indices.create_data_stream(name=INDEX_NAME)
+        print(f"✅ 데이터 스트림 '{INDEX_NAME}' OK")
     except Exception as e:
         if "resource_already_exists_exception" in str(e):
-            print(f"⚠️ 데이터 스트림 '{INDEX_ALIAS}' 이미 존재")
+            print(f"⚠️ 데이터 스트림 '{INDEX_NAME}' 이미 존재")
         else:
             raise
 

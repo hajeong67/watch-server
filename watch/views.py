@@ -1,5 +1,5 @@
 from watch.opensearch_client import client
-from watch.opensearch_setup import INDEX_ALIAS
+from watch.opensearch_setup import INDEX_NAME
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -20,7 +20,7 @@ class SensorDataListAPIView(APIView):
     )
     def get(self, request, *args, **kwargs):
         query = {"query": {"match_all": {}}}
-        res   = client.search(index=INDEX_ALIAS, body=query)
+        res   = client.search(index=INDEX_NAME, body=query)
         data  = [hit["_source"] for hit in res["hits"]["hits"]]
         return Response({"data": data})
 
@@ -33,7 +33,7 @@ class SensorDataDetailAPIView(APIView):
     )
     def get(self, request, device_id, *args, **kwargs):
         query = {"query": {"match": {"device_id": device_id}}}
-        res   = client.search(index=INDEX_ALIAS, body=query)
+        res   = client.search(index=INDEX_NAME, body=query)
         data  = [hit["_source"] for hit in res["hits"]["hits"]]
         return Response({"data": data})
 
@@ -61,7 +61,7 @@ class WatchSensorDataAPIView(APIView):
         }
 
         # OpenSearch에 저장 + 동기 추론
-        save_res  = client.index(index=INDEX_ALIAS, body=data)
+        save_res  = client.index(index=INDEX_NAME, body=data)
         infer_res = run_ppg_positioning(data)
 
         return Response({
