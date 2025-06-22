@@ -4,6 +4,7 @@ import os
 
 from django.core.cache import cache
 from emotion.ml_models.ppg_model import PPGModel
+from datetime import datetime
 
 import logging
 from users.models import Watch # device_id → user 매핑
@@ -75,6 +76,7 @@ def run_ppg_positioning(data):
             "email": watch.user.email
         },
         "time": time,
+        "@timestamp": datetime.utcfromtimestamp(time / 1000).isoformat() + "Z",
         "ppg": ppg,
         "acc": acc,
         "state": state
