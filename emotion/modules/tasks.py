@@ -4,7 +4,7 @@ import os
 
 from django.core.cache import cache
 from emotion.ml_models.ppg_model import PPGModel
-from datetime import datetime
+from datetime import datetime, timezone
 
 import logging
 from users.models import Watch # device_id → user 매핑
@@ -39,9 +39,10 @@ def get_or_restore_ppg_model():
     return model
 
 # OpenSearch에 기록할 로깅 포맷
-def get_json_log(level, message):
-    message['level'] = level
-    return json.dumps(message)
+def get_json_log(level, data):
+    data["@timestamp"] = data.get("time", datetime.now(timezone.utc).isoformat())
+    data["log_level"] = level
+    return data
 
 # 장치 정보 가져오기
 def get_device(device_id):
