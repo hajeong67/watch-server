@@ -8,7 +8,8 @@ from rest_framework import status
 from watch.serializers import SensorDataSerializer
 from emotion.modules.tasks import run_ppg_positioning
 import time
-from users.permissions import MiddlewareAuthenticated
+from users.authentication import DeviceIDAuthentication
+from users.permissions import IsDeviceAuthenticated
 
 class SensorDataListAPIView(APIView):
     """Data-Stream 전체 또는 필터링 없이 최근 데이터 조회 (GET)"""
@@ -39,8 +40,8 @@ class SensorDataDetailAPIView(APIView):
 class WatchSensorDataAPIView(APIView):
     """워치에서 전송 → 저장 → 실시간 추론 (POST)"""
 
-    authentication_classes = []
-    permission_classes = [MiddlewareAuthenticated]
+    authentication_classes = [DeviceIDAuthentication]
+    permission_classes = [IsDeviceAuthenticated]
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
