@@ -61,7 +61,18 @@ class WatchSensorDataAPIView(APIView):
         }
 
         # OpenSearch에 저장 + 동기 추론
-        save_res  = client.index(index=INDEX_NAME, body=data)
+        try:
+            save_res = client.index(
+                index=INDEX_NAME,
+                body=data,
+                params={"error_trace": "true"}
+            )
+        except Exception as e:
+            from pprint import pprint
+            print("❌ OpenSearch 저장 실패:")
+            pprint(e.info)
+            return Response({"error": "OpenSearch 저장 실패", "detail": str(e)}, status=500)
+
         infer_res = run_ppg_positioning(data)
 
         return Response({
