@@ -3,4 +3,5 @@ from rest_framework.permissions import BasePermission
 class MiddlewareAuthenticated(BasePermission):
     def has_permission(self, request, view):
         print(">> [DEBUG] MiddlewareAuthenticated called")
+        print(">> [DEBUG] is_authenticated:", request.user.is_authenticated)
         return bool(request.user and request.user.is_authenticated)
