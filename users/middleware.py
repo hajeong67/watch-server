@@ -2,6 +2,7 @@ import json
 from django.utils.deprecation import MiddlewareMixin
 from users.models import Watch
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth import login
 
 class DeviceIDMiddleware(MiddlewareMixin):
     def process_request(self, request):
@@ -29,6 +30,7 @@ class DeviceIDMiddleware(MiddlewareMixin):
                 watch = Watch.objects.select_related("user").get(device_id=device_id)
                 request.user = watch.user
                 request._cached_user = watch.user
+                login(request, watch.user, backend='django.contrib.auth.backends.ModelBackend')
                 print(f"인증 성공! user: {request.user.username} (user.id: {request.user.id})")
             except Watch.DoesNotExist:
                 request.user = AnonymousUser()
