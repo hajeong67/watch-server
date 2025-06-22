@@ -37,15 +37,11 @@ class SensorDataDetailAPIView(APIView):
 
 class WatchSensorDataAPIView(APIView):
     """워치에서 전송 → 저장 → 실시간 추론 (POST)"""
+
+    authentication_classes = []
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(
-        summary="워치 센서 데이터 수신 & 실시간 추론",
-        request=SensorDataSerializer,
-        responses={201: SensorDataSerializer},
-    )
     def post(self, request, *args, **kwargs):
-
         if not request.user.is_authenticated:
             return Response({"error": "인증 필요"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -62,17 +58,12 @@ class WatchSensorDataAPIView(APIView):
             "email":    request.user.email,
         }
 
-        # OpenSearch Data-Stream에 저장
-        save_res = client.index(index=INDEX_ALIAS, body=data)
-
-        # 동기 추론 수행
+        # OpenSearch에 저장 + 동기 추론
+        save_res  = client.index(index=INDEX_ALIAS, body=data)
         infer_res = run_ppg_positioning(data)
 
-        return Response(
-            {
-                "message": "저장 및 추론 완료",
-                "opensearch_result": save_res,
-                "inference_result":  infer_res,
-            },
-            status=status.HTTP_201_CREATED,
-        )
+        return Response({
+            "message": "저장 및 추론 완료",
+            "opensearch_result": save_res,
+            "inference_result":  infer_res,
+        }, status=status.HTTP_201_CREATED)
