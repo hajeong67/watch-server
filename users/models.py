@@ -8,9 +8,9 @@ from django.core.exceptions import PermissionDenied
 import logging
 from config import settings
 from watch.opensearch_client import client
-from watch.opensearch_service import INDEX_NAME
 
 logger = logging.getLogger(__name__)
+INDEX_NAME = settings.OPENSEARCH_INDEX_NAME
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)

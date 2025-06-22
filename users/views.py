@@ -4,7 +4,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from .models import Watch
 from watch.opensearch_client import client
-from watch.opensearch_service import INDEX_NAME
+from watch.opensearch_setup import INDEX_NAME
 from watch.serializers import SensorDataSerializer
 
 User = get_user_model()

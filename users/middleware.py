@@ -1,6 +1,7 @@
 import json
 from django.utils.deprecation import MiddlewareMixin
 from users.models import Watch
+from django.contrib.auth.models import AnonymousUser
 
 class DeviceIDMiddleware(MiddlewareMixin):
     def process_request(self, request):
@@ -9,7 +10,8 @@ class DeviceIDMiddleware(MiddlewareMixin):
 
         content_type = request.META.get("CONTENT_TYPE", "")
         if "application/json" not in content_type:
-            request.user = None
+            request.user = AnonymousUser()
+            request._cached_user = AnonymousUser()
             print("Content-Type이 application/json이 아님")
             return
 
@@ -26,10 +28,13 @@ class DeviceIDMiddleware(MiddlewareMixin):
             try:
                 watch = Watch.objects.select_related("user").get(device_id=device_id)
                 request.user = watch.user
+                request._cached_user = watch.user
                 print(f"인증 성공! user: {request.user.username} (user.id: {request.user.id})")
             except Watch.DoesNotExist:
-                request.user = None
+                request.user = AnonymousUser()
+                request._cached_user = AnonymousUser()
                 print(f"인증 실패! device_id {device_id} 찾을 수 없음")
         else:
-            request.user = None
+            request.user = AnonymousUser()
+            request._cached_user = AnonymousUser()
             print("device_id 없음")

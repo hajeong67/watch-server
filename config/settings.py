@@ -169,10 +169,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Celery Configuration
 CELERY_ENABLE_UTC = False
 CELERY_TIMEZONE = 'Asia/Seoul'
-# CELERY_BROKER_URL = f"redis://{os.environ.get('REDIS_SESSION_STORAGE_PRIMARY', LOCALHOST)}:6379/0"
-# CELERY_BROKER_URL = 'redis://172.17.0.3:6379/0'
-# CELERY_BROKER_URL = 'redis://redis:6379/0'
-# CELERY_BROKER_URL = f"redis://{os.environ.get('REDIS_SESSION_STORAGE_PRIMARY', '127.0.0.1')}:6379/0"
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 7200}  # 1 hour
 CELERY_RESULT_BACKEND = 'django-db'
@@ -234,4 +230,4 @@ LOGGING = {
     },
 }
 
-from watch.opensearch_client import client as opensearch_client
+OPENSEARCH_INDEX_NAME = "logs-ppg-inference"

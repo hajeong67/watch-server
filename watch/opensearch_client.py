@@ -21,4 +21,11 @@ client = OpenSearch(
     ssl_show_warn=False  # SSL 경고 비활성화
 )
 
-print("OpenSearch 클라이언트가 정상적으로 연결되었습니다!")
+def is_connected():
+    try:
+        info = client.info()
+        print(f"✅ OpenSearch 연결 성공: {info['cluster_name']}")
+        return True
+    except Exception as e:
+        print(f"❌ 연결 실패: {e}")
+        return False
