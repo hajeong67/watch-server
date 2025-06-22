@@ -1,11 +1,11 @@
 from watch.opensearch_client import client
 
-INDEX_NAME       = "logs-ppg-inference"
+INDEX_NAME= "logs-ppg-inference"
 
 # 인덱스 템플릿
 def create_index_template():
     template = {
-        "index_patterns": [f"{INDEX_NAME}-*"],
+        "index_patterns": [INDEX_NAME, f"{INDEX_NAME}-*"],
         "data_stream": {},
         "template": {
             "settings": {
