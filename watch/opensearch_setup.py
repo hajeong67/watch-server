@@ -14,6 +14,7 @@ def create_index_template():
             },
             "mappings": {
                 "properties": {
+                    "@timestamp": {"type": "date", "format": "epoch_millis"},
                     "time":      {"type": "date", "format": "epoch_millis"},
                     "device_id": {"type": "keyword"},
                     "acc":       {"type": "object",  "enabled": False},

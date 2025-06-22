@@ -54,6 +54,7 @@ class WatchSensorDataAPIView(APIView):
         # 데이터 가공
         data = serializer.validated_data
         data.setdefault("time", int(time.time() * 1000))  # epoch_millis
+        data["@timestamp"] = data["time"]
         data["user"] = {
             "id":       request.user.id,
             "username": request.user.username,
