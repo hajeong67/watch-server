@@ -85,6 +85,6 @@ def create_data_stream():
             raise
 
 def init_opensearch():
-    create_ilm_policy()
+    # create_ilm_policy()
     create_index_template()
     create_data_stream()
