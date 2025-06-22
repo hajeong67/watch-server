@@ -3,18 +3,12 @@ import numpy as np
 import os
 
 from django.core.cache import cache
-from config import settings
-from celery import shared_task
-from opensearchpy.exceptions import RequestError
-
 from emotion.ml_models.ppg_model import PPGModel
-from users import models as users_models, serializers as users_serializers
 
-from celery import shared_task
 import logging
 from users.models import Watch # device_id → user 매핑
 from preprocess.ppg_preprocess import PpgModelPredictor
-import config.settings as settings
+from watch.opensearch_client import client as os_client
 
 logger = logging.getLogger(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # emotion/modules 디렉토리 기준
@@ -61,12 +55,6 @@ def run_ppg_positioning(data):
     acc = data.get('acc')
     time = data.get('time')
 
-    # try:
-    #     watch = Watch.objects.select_related("user").get(device_id=device_id)
-    # except Watch.DoesNotExist:
-    #     logger.warning(f"Unknown device_id: {device_id}")
-    #     return
-
     watch = Watch.objects.filter(device_id=device_id).first()
     if not watch:
         logger.warning(f"Unknown device_id: {device_id}")
@@ -94,7 +82,7 @@ def run_ppg_positioning(data):
 
     # OpenSearch 저장
     try:
-        settings.opensearch_client.index(
+        os_client.index(
             index="logs-ppg-inference",
             body=get_json_log("INFO", result)
         )
@@ -115,13 +103,3 @@ def get_json_log(level, message):
 
     message['level'] = level
     return json.dumps(message, default=convert)
-
-# # Celery 태스크로 비동기 실행
-# @shared_task(ignore_result=True)
-# def run_ppg_positioning_task(data):
-#     run_ppg_positioning(data)
-#
-# @shared_task
-# def log_demo_task(message):
-#     logger.info(f"[TASK] log_demo_task received message: {message}")
-#     return f"Logged message: {message}"
