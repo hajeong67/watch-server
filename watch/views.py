@@ -61,23 +61,16 @@ class WatchSensorDataAPIView(APIView):
             "email":    request.user.email,
         }
 
-        # OpenSearch에 저장 + 동기 추론
-        try:
-            save_res = client.index(
-                index=INDEX_NAME,
-                body=data,
-                params={"error_trace": "true"}
-            )
-        except Exception as e:
-            from pprint import pprint
-            print("❌ OpenSearch 저장 실패:")
-            pprint(e.info)
-            return Response({"error": "OpenSearch 저장 실패", "detail": str(e)}, status=500)
-
         infer_res = run_ppg_positioning(data)
 
         return Response({
             "message": "저장 및 추론 완료",
-            "opensearch_result": save_res,
             "inference_result":  infer_res,
         }, status=status.HTTP_201_CREATED)
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def health_check(request):
+    return JsonResponse({"status": "ok"})
