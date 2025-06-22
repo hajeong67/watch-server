@@ -19,13 +19,19 @@ def create_ilm_policy():
                 },
                 "delete": {
                     "min_age": "30d",
-                    "actions": {"delete": {}}
+                    "actions": { "delete": {} }
                 }
             }
         }
     }
+
     try:
-        client.ilm.put_lifecycle(name=ILM_POLICY_NAME, body=policy)
+        # 직접 REST API 호출 (OpenSearch >= 1.x, < 2.x 또는 ES 호환성 모드)
+        client.transport.perform_request(
+            method="PUT",
+            url=f"/_ilm/policy/{ILM_POLICY_NAME}",
+            body=policy
+        )
         print(f"✅ ILM 정책 '{ILM_POLICY_NAME}' OK")
     except Exception as e:
         if "resource_already_exists_exception" in str(e):
