@@ -25,7 +25,7 @@ def create_ilm_policy():
         }
     }
     try:
-        client.indices.put_lifecycle(name=ILM_POLICY_NAME, body=policy)
+        client.ilm.put_lifecycle(name=ILM_POLICY_NAME, body=policy)
         print(f"✅ ILM 정책 '{ILM_POLICY_NAME}' OK")
     except Exception as e:
         if "resource_already_exists_exception" in str(e):
